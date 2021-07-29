@@ -2,66 +2,67 @@
 layout: default
 ---
 
-{% assign minutes = content | strip_html | number_of_words | divided_by: 180 %}
-{% if minutes == 0 %}
-{% assign minutes = 1 %}
-{% endif %}
-
-<div class="post-header mb2">
-  <h1>{{ page.title }}</h1>
-  <span class="post-meta">{{ page.date | date: site.date_format }}</span><br>
-  {% if page.update_date %}
-    <span class="post-meta">{{ site.text.post.updated | default: "Updated" }}: {{ page.update_date | date: site.date_format }}</span><br>
-  {% endif %}
-  <span class="post-meta small">
-  {% if page.minutes %}
-    {{ page.minutes }} {{ site.text.post.minute_read | default: "minute read" }}
-  {% else %}
-    {{ minutes }} {{ site.text.post.minute_read | default: "minute read" }}
-  {% endif %}
-  </span>
-</div>
-
-<article class="post-content">
-  {{ content }}
-</article>
-
-{% if site.show_sharing_icons %}
-  {% include share_buttons.html %}
-{% endif %}
-
-{% if site.show_post_footers %}
-  {% include post_footer.html %}
-{% endif %}
-
-{% if site.disqus_shortname %}
-  <div id="disqus_thread"></div>
-  <script type="text/javascript">
-    var disqus_shortname  = '{{ site.disqus_shortname }}';
-    var disqus_identifier = '{{ page.id }}';
-    var disqus_title      = {{ page.title | jsonify }};
-
-    (function() {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-  </script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-{% endif %}
-
-{% if site.facebook_comments %}
-  <div class="fb-comments" data-href="{{ site.url }}{{ page.url }}" data-width="100%" data-numposts="{{ site.facebook_comments_number }}"></div>
-{% endif %}
-
-{% if site.show_related_posts %}
-  <h3 class="related-post-title">{{ site.text.post.related_posts | default: "Related Posts" }}</h3>
-  {% for post in site.related_posts %}
-    <div class="post ml2">
-      <a href="{{ post.url | relative_url }}" class="post-link">
-        <h4 class="post-title">{{ post.title }}</h4>
-        <p class="post-summary">{{ post.summary }}</p>
-      </a>
+<article class="post">
+  {% if page.categories.size > 0 %}
+    <div class="post-meta">
+      <ul class="post-categories">
+        {%- for category in page.categories -%}
+          <li>
+            {% assign slugified_category = category | slugify %}
+            {%- if site.categories_path -%}
+              <a class="post-category" href="{{ site.categories_path | relative_url }}#{{ slugified_category }}">{{ category }}</a>
+            {%- else -%}
+              <span class="post-category">{{ category }}</span>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
     </div>
-  {% endfor %}
-{% endif %}
+  {% endif %}
+  <h1 class="post-title">{{ page.title }}</h1>
+  <div class="post-meta">
+    <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+      {{ page.date | date_to_string }}
+    </time>
+    {%- if page.last_modified_at -%}
+      <span> ~ </span>
+      {%- assign mdate = page.last_modified_at | date_to_xmlschema -%}
+      <time datetime="{{ mdate }}" itemprop="dateModified">
+        {{ mdate | date_to_string }}
+      </time>
+    {%- endif -%}
+    {%- if page.author -%}
+      <span> • </span>
+      {% for author in page.author %}
+        <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+          {{ author }}
+        </span>
+        {%- if forloop.last == false %}, {% endif -%}
+      {% endfor %}
+    {%- endif -%}
+  </div>
+  
+  {{ content }}
+
+  {% if page.tags.size > 0 %}
+    <div class="post-meta">
+      <i class="post-tags-icon fas fa-tag"></i>
+      <ul class="post-tags">
+        {%- for tag in page.tags -%}
+          <li>
+            {% assign slugified_tag = tag | slugify %}
+            {%- if site.tags_path -%}
+              <a class="post-tag" href="{{ site.tags_path | relative_url }}#{{ slugified_tag }}">{{ slugified_tag }}</a>
+            {%- else -%}
+              <span class="post-tag">{{ slugified_tag }}</span>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  {% endif %}
+
+  {% if jekyll.environment == "production" and site.disqus and page.comments != false %}
+    {% include disqus.html %}
+  {% endif %}
+</article>
