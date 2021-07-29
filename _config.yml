@@ -1,0 +1,16 @@
+title: Hydure
+tagline: A concise two-column blog theme for Jekyll
+
+author:
+  name: Song-Zi Vong
+  url: https://twitter.com/zivong91
+
+plugins:
+  - jekyll-feed
+  - jekyll-paginate
+  - jekyll-seo-tag
+
+paginate: 3
+
+tags_path: /tags/
+categories_path: /categories/
