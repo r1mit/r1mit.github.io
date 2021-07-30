@@ -3,10 +3,10 @@
 Gem::Specification.new do |spec|
   spec.name          = "jekyll-theme-hydure"
   spec.version       = "1.0.0"
-  spec.authors       = ["Song-Zi Vong"]
-  spec.email         = ["zivong@protonmail.com"]
+  spec.authors       = ["r1mit"]
+  spec.email         = ["r1mit@protonmail.com"]
 
-  spec.summary       = "A concise two-column blog theme for Jekyll."
+  spec.summary       = "O ever youthful, O ever weeping."
   spec.homepage      = "https://github.com/zivong/jekyll-theme-hydure"
   spec.license       = "MIT"
 

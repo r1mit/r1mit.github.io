@@ -1,9 +1,9 @@
-title: Hydure
-tagline: A concise two-column blog theme for Jekyll
+title: 01-world
+tagline: O ever youthful, O ever weeping.
 
 author:
-  name: Song-Zi Vong
-  url: https://twitter.com/zivong91
+  name: r1mit
+  url: https://twitter.com/r1mit1
 
 plugins:
   - jekyll-feed
